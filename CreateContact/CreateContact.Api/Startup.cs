@@ -1,10 +1,13 @@
-﻿using CreateContact.Application.Handlers.Contact.CreateContact;
+﻿using CreateContact.Application.DTOs.Contact.CreateContact;
+using CreateContact.Application.DTOs.Validations;
+using CreateContact.Application.Handlers.Contact.CreateContact;
 using CreateContact.Infrastructure.Crypto;
 using CreateContact.Infrastructure.HealthCheck;
 using CreateContact.Infrastructure.Middlewares;
 using CreateContact.Infrastructure.Services.Contact;
 using CreateContact.Infrastructure.Settings;
 using CreateContact.Infrastructure.UnitOfWork;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -62,22 +65,7 @@ namespace CreateContact.Api
         static public void ConfigureHandleServices(IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateContactHandler).Assembly));
-
-            //services.AddScoped<ICreateContactHandler, CreateContactHandler>();
-            //services.AddScoped<IGetContactBydIdHandler, GetContactBydIdHandler>();
-            //services.AddScoped<IDeleteContactByIdHandler, DeleteContactByIdHandler>();
-            //services.AddScoped<IUpdateContactByIdHandler, UpdateContactByIdHandler>();
-            //services.AddScoped<IGetContactListPaginatedByFiltersHandler, GetContatListPaginatedByFiltersHandler>();
-
-            //services.AddScoped<IPasswordHandler, PasswordHandler>();
-            //services.AddScoped<ITokenHandler, Application.Handlers.Auth.TokenHandler>();
-            //services.AddScoped<ICreateUserHandler, CreateUserHandler>();
-            //services.AddScoped<IDeleteUserHandler, DeleteUserHandler>();
-            //services.AddScoped<IGetUserByIdHandler, GetUserByIdHandler>();
-            //services.AddScoped<IGetUserByNameHandler, GetUserByNameHandler>();
-            //services.AddScoped<IGetUserListHandler, GetUserListHandler>();
-            //services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();
-            //services.AddScoped<IValidateUserHandler, ValidateUserHandler>();
+            services.AddTransient<IValidator<CreateContactRequest>, ContactValidation>();
         }
 
         public static void ConfigureSwagger(IServiceCollection services)

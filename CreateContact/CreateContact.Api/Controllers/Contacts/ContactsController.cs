@@ -21,7 +21,6 @@ namespace CreateContact.Api.Controllers.Contacts
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created)]
         [SwaggerResponse(StatusCodes.Status400BadRequest, type: typeof(BaseReponse))]
-        [Authorize]
         public async Task<IActionResult> CreateAsync(
             [FromBody] CreateContactRequest request)
         {
