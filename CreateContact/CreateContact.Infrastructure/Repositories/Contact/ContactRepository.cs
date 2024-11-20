@@ -17,7 +17,7 @@ namespace CreateContact.Infrastructure.Repositories.Contact
         {
             var result = await _database.Connection.ExecuteScalarAsync<int>(
                 $@"INSERT INTO
-                    [{SCHEMA}].[{TABLE_NAME}]
+                    [{TABLE_NAME}]
                          ({nameof(ContactEntity.Nome)},
                           {nameof(ContactEntity.Email)},
                           {nameof(ContactEntity.Ddd)},

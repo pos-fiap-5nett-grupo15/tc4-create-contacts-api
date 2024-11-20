@@ -4,11 +4,8 @@ using TechChallenge.Infrastructure.UnitOfWork;
 
 namespace CreateContact.Infrastructure.UnitOfWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface ICreateContactUnitOfWork : IBaseUnitOfWork
     {
         IContactRepository ContactRepository { get; }
-
-        ITransaction BeginTransaction();
-        ITransaction BeginTransaction(TransactionOptions transactionOptions);
     }
 }

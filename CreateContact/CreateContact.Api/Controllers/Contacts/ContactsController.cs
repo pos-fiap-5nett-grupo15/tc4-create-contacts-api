@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using TechChallenge.Common.DTOs;
 
 namespace CreateContact.Api.Controllers.Contacts
 {

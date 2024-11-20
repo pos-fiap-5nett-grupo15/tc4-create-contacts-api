@@ -45,7 +45,7 @@ namespace CreateContact.Api
 
         private void ConfigureUnitOfWork(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICreateContactUnitOfWork, CreateContactUnitOfWork>();
         }
     }
 }

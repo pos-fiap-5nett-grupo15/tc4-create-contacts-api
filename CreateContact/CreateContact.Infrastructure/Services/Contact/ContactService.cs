@@ -5,9 +5,9 @@ namespace CreateContact.Infrastructure.Services.Contact
 {
     public class ContactService : IContactService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICreateContactUnitOfWork _unitOfWork;
 
-        public ContactService(IUnitOfWork unitOfWork)
+        public ContactService(ICreateContactUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
