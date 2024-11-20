@@ -21,12 +21,16 @@ namespace CreateContact.Infrastructure.Repositories.Contact
                          ({nameof(ContactEntity.Nome)},
                           {nameof(ContactEntity.Email)},
                           {nameof(ContactEntity.Ddd)},
-                          {nameof(ContactEntity.Telefone)})
+                          {nameof(ContactEntity.Telefone)},
+                          {nameof(ContactEntity.SituacaoAnterior)},
+                          {nameof(ContactEntity.SituacaoAtual)})
                     VALUES
                           ('{model.Nome}',
                            '{model.Email}',
                            {model.Ddd},
-                           {model.Telefone});
+                           {model.Telefone},
+                           {(model.SituacaoAnterior is null ? "NULL" : (int)model.SituacaoAnterior.Value)},
+                           {(model.SituacaoAtual is null ? "NULL" : (int)model.SituacaoAtual.Value)});
                     SELECT SCOPE_IDENTITY();
             ");
             return result;

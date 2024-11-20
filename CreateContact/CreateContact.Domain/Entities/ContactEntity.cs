@@ -1,4 +1,6 @@
-﻿namespace CreateContact.Domain.Entities
+﻿using CreateContact.Domain.Enums;
+
+namespace CreateContact.Domain.Entities
 {
     public class ContactEntity : BaseEntity
     {
@@ -8,18 +10,24 @@
             string nome,
             string email,
             int ddd,
-            int telefone)
+            int telefone,
+            ContactSituationEnum? situacaoAtual,
+            ContactSituationEnum? situacaoAnterior)
             : this()
         {
             Nome = nome;
             Email = email;
             Ddd = ddd;
             Telefone = telefone;
+            SituacaoAtual = situacaoAtual;
+            SituacaoAnterior = situacaoAnterior;
         }
 
         public string Nome { get; init; }
         public string Email { get; init; }
         public int Ddd { get; init; }
         public int Telefone { get; init; }
+        public ContactSituationEnum? SituacaoAnterior { get; init; }
+        public ContactSituationEnum? SituacaoAtual { get; init; }
     }
 }
