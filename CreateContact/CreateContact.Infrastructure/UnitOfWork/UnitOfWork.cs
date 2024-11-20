@@ -1,5 +1,5 @@
 ﻿using CreateContact.Infrastructure.Repositories.Contact;
-using System.Transactions;
+using TechChallenge.Infrastructure.UnitOfWork;
 
 namespace CreateContact.Infrastructure.UnitOfWork
 {
@@ -24,7 +24,7 @@ namespace CreateContact.Infrastructure.UnitOfWork
             return tx;
         }
 
-        public ITransaction BeginTransaction(TransactionOptions transactionOptions)
+        public ITransaction BeginTransaction(System.Transactions.TransactionOptions transactionOptions)
         {
             var tx = new Transaction(transactionOptions);
             this._techDabase.EnsureConnectionIdOpen();

@@ -1,6 +1,6 @@
-﻿using CreateContact.Domain.Entities;
-using CreateContact.Infrastructure.UnitOfWork;
-using Dapper;
+﻿using Dapper;
+using TechChallenge.Domain.Entities.Contact;
+using TechChallenge.Infrastructure.UnitOfWork;
 
 namespace CreateContact.Infrastructure.Repositories.Contact
 {

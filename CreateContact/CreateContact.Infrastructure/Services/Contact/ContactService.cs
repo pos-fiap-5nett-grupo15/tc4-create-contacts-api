@@ -1,5 +1,5 @@
-﻿using CreateContact.Domain.Entities;
-using CreateContact.Infrastructure.UnitOfWork;
+﻿using CreateContact.Infrastructure.UnitOfWork;
+using TechChallenge.Domain.Entities.Contact;
 
 namespace CreateContact.Infrastructure.Services.Contact
 {

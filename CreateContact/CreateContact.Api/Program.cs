@@ -5,15 +5,12 @@ internal class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddControllers();
 
         var startup = new Startup(builder.Configuration);
-        startup.ConfigureService(builder.Services);
+        startup.ConfigureServiceImpl(builder.Services);
 
         var app = builder.Build();
-
-        startup.Configure(app, app.Environment);
-
+        startup.ConfigureImpl(app, app.Environment);
         app.Run();
     }
 }

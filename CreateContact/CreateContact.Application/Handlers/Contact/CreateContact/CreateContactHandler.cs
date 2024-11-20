@@ -1,12 +1,10 @@
 ﻿using CreateContact.Application.DTOs.Contact.CreateContact;
-using CreateContact.Domain.Entities;
-using CreateContact.Domain.Enums;
 using CreateContact.Infrastructure.Services.Contact;
 using FluentValidation;
 using MediatR;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using System.Text;
+using TechChallenge.Common.RabbitMQ;
+using TechChallenge.Domain.Entities.Contact;
+using TechChallenge.Domain.Enums;
 
 namespace CreateContact.Application.Handlers.Contact.CreateContact
 {
@@ -34,7 +32,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
 
             await _contactService.CreateAsync(Mapper(requisicao));
 
-            await Publish(requisicao, ct);
+            await RabbitMQManager.Publish(requisicao, "localhost", EXCHANGE_NAME, ROUTING_KEY, ct);
 
             return new CreateContactResponse();
         }
@@ -55,21 +53,6 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             return retorno;
         }
 
-        public static async Task Publish(CreateContactRequest request, CancellationToken ct)
-        {
-            // Criar uma conexão com o RabbitMQ
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = await factory.CreateConnectionAsync())
-            using (var channel = await connection.CreateChannelAsync())
-            {
-                // Converter a mensagem para bytes
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request));
-
-                // Enviar a mensagem para a fila
-                await channel.BasicPublishAsync(EXCHANGE_NAME, ROUTING_KEY, body, ct);
-            }
-        }
-
         public static ContactEntity Mapper(CreateContactRequest request) =>
             new(nome: request.Nome ?? string.Empty,
                 email: request.Email ?? string.Empty,
@@ -77,7 +60,5 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
                 telefone: request.Telefone,
                 situacaoAnterior: null,
                 situacaoAtual: ContactSituationEnum.PENDENTE_CRIACAO);
-
     }
-
 }
