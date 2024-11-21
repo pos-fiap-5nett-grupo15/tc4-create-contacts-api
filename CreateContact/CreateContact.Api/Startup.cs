@@ -2,6 +2,7 @@
 using CreateContact.Application.DTOs.Validations;
 using CreateContact.Application.Handlers.Contact.CreateContact;
 using CreateContact.Infrastructure.Services.Contact;
+using CreateContact.Infrastructure.Settings;
 using CreateContact.Infrastructure.UnitOfWork;
 using FluentValidation;
 using TechChallenge.Infrastructure.DefaultStartup;
@@ -26,6 +27,7 @@ namespace CreateContact.Api
         internal void ConfigureServiceImpl(IServiceCollection services)
         {
             this.ConfigureService(services);
+            services.AddLogging();
 
             ConfigureUnitOfWork(services, this.Configuration);
             ConfigureHandleServices(services);
@@ -39,6 +41,8 @@ namespace CreateContact.Api
 
         private void ConfigureHandleServices(IServiceCollection services)
         {
+            services.AddSingleton<IRabbitMQProducerSettings>(Configuration.GetSection(nameof(RabbitMQProducerSettings))?.Get<RabbitMQProducerSettings>() ?? throw new ArgumentNullException(nameof(RabbitMQProducerSettings)));
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateContactHandler).Assembly));
             services.AddTransient<IValidator<CreateContactRequest>, ContactValidation>();
         }
