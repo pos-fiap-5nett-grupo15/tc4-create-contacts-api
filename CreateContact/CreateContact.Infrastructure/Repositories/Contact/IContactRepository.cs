@@ -8,6 +8,7 @@ namespace CreateContact.Infrastructure.Repositories.Contact
         Task<ContactEntity?> GetByIdAsync(int id);
         Task DeleteByIdAsync(int id);
         Task UpdateByIdAsync(int id, string? nome, string? email, int? ddd, int? telefone);
+        Task<ContactEntity?> UpdateStatusByIdAsync(int id, int? situacaoAnterior, int novaSituacao);
         Task<IEnumerable<ContactEntity>> GetListPaginatedByFiltersAsync(int? ddd, int currentIndex, int pageSize);
     }
 }

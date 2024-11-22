@@ -17,7 +17,7 @@ namespace CreateContact.Infrastructure.Repositories.Contact
         {
             var result = await _database.Connection.ExecuteScalarAsync<int>(
                 $@"INSERT INTO
-                    [{TABLE_NAME}]
+                   [{SCHEMA}].[{TABLE_NAME}]
                          ({nameof(ContactEntity.Nome)},
                           {nameof(ContactEntity.Email)},
                           {nameof(ContactEntity.Ddd)},
@@ -36,11 +36,9 @@ namespace CreateContact.Infrastructure.Repositories.Contact
             return result;
         }
 
-
         public async Task<ContactEntity?> GetByIdAsync(int id) =>
             await _database.Connection.QueryFirstOrDefaultAsync<ContactEntity>(
                 $"SELECT * FROM [{SCHEMA}].[{TABLE_NAME}] WHERE {nameof(ContactEntity.Id)} = {id};");
-
         public async Task DeleteByIdAsync(int id) =>
             await _database.Connection.QueryFirstOrDefaultAsync<ContactEntity>(
                 $"DELETE FROM [{SCHEMA}].[{TABLE_NAME}] WHERE {nameof(ContactEntity.Id)} = {id};");
@@ -61,6 +59,14 @@ namespace CreateContact.Infrastructure.Repositories.Contact
                     {(!telefone.HasValue
                         ? string.Empty
                         : $",{nameof(ContactEntity.Telefone)} = {telefone}")}
+                   WHERE {nameof(ContactEntity.Id)} = {id};");
+
+        public async Task<ContactEntity?> UpdateStatusByIdAsync(int id, int? situacaoAnterior, int novaSituacao) =>
+            await _database.Connection.QueryFirstOrDefaultAsync<ContactEntity>(
+                $@"UPDATE [{SCHEMA}].[{TABLE_NAME}]
+                   SET
+                    {nameof(ContactEntity.SituacaoAnterior)} = {(situacaoAnterior.HasValue ? situacaoAnterior.Value : "NULL")},
+                    {nameof(ContactEntity.SituacaoAtual)} = {novaSituacao}
                    WHERE {nameof(ContactEntity.Id)} = {id};");
 
         public async Task<IEnumerable<ContactEntity>> GetListPaginatedByFiltersAsync(int? ddd, int currentIndex, int pageSize) =>
