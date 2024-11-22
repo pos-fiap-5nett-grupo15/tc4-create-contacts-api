@@ -1,6 +1,7 @@
 ﻿using CreateContact.Application.DTOs.Contact.CreateContact;
 using CreateContact.Infrastructure.Services.Contact;
 using CreateContact.Infrastructure.Settings;
+using CreateContact.Worker.Messages;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -34,10 +35,10 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             if (Validate(requisicao) is var validacao && !string.IsNullOrWhiteSpace(validacao.ErrorDescription))
                 return validacao;
 
-            await _contactService.CreateAsync(Mapper(requisicao));
+            var id = await _contactService.CreateAsync(Mapper(requisicao));
 
             await RabbitMQManager.Publish(
-                requisicao,
+                new CreateContactMessage { Id = id },
                 _rabbitMQProducerSettings.Host,
                 _rabbitMQProducerSettings.Exchange,
                 _rabbitMQProducerSettings.RoutingKey,

@@ -29,7 +29,7 @@ namespace CreateContact.Api
             this.ConfigureService(services);
             services.AddLogging();
 
-            ConfigureUnitOfWork(services, this.Configuration);
+            ConfigureUnitOfWork(services);
             ConfigureHandleServices(services);
             ConfigureContactServices(services);
         }
@@ -47,7 +47,7 @@ namespace CreateContact.Api
             services.AddTransient<IValidator<CreateContactRequest>, ContactValidation>();
         }
 
-        private void ConfigureUnitOfWork(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureUnitOfWork(IServiceCollection services)
         {
             services.AddScoped<ICreateContactUnitOfWork, CreateContactUnitOfWork>();
         }
