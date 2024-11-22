@@ -26,20 +26,32 @@ namespace CreateContract.Worker
             // Logging
             services.AddLogging();
 
-            // Add services to the container.
+            this.ConfigureRabitMQ(services);
+            this.ConfigureDatabase(services);
+            this.ConfigureCustomServices(services);
+            this.ConfigureConsumers(services);
+        }
+
+        private void ConfigureRabitMQ(IServiceCollection services)
+        {
             services.AddSingleton<IRabbitMQProducerSettings>(Configuration.GetSection(nameof(RabbitMQProducerSettings))?.Get<RabbitMQProducerSettings>() ?? throw new ArgumentNullException(nameof(RabbitMQProducerSettings)));
             services.AddSingleton(new RabbitMQConnector(Configuration.GetSection(nameof(RabbitMQConsumerSettings))?.Get<RabbitMQConsumerSettings>()));
             services.AddHostedService<RabbitMQConsumer>();
+        }
 
-            // Database
+        private void ConfigureDatabase(IServiceCollection services)
+        {
             var cryptoService = new CryptoService(Configuration.GetSection(nameof(CryptoSettings)).Get<CryptoSettings>());
             services.AddSingleton((ICryptoService)cryptoService);
             services.AddScoped<ITechDatabase, TechDatabase>();
             services.AddScoped<ICreateContactUnitOfWork, CreateContactUnitOfWork>();
+        }
 
+        private void ConfigureCustomServices(IServiceCollection services) =>
             services.AddScoped<IContactService, ContactService>();
 
+        private void ConfigureConsumers(IServiceCollection services) =>
             services.AddScoped<ICreateContactConsumer, CreateContactConsumer>();
-        }
+
     }
 }

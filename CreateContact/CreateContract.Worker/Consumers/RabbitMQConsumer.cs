@@ -19,7 +19,9 @@ namespace CreateContract.Worker.Consumers
             RabbitMQConnector rabbitMQService,
             IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            rabbitMQService = rabbitMQService ?? throw new ArgumentNullException(nameof(rabbitMQService));
+
             _queueName = rabbitMQService.RabbitMQSettings.Queue;
             _connection = rabbitMQService.GetConnection().Result;
             _channel = _connection.CreateChannelAsync().Result;
@@ -35,7 +37,6 @@ namespace CreateContract.Worker.Consumers
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    // Resolve o handler diretamente
                     var handler = scope.ServiceProvider.GetRequiredService<ICreateContactConsumer>();
                     var exampleMessage = JsonSerializer.Deserialize<CreateContactMessage>(message);
                     if (exampleMessage != null)

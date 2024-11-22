@@ -12,7 +12,7 @@ namespace CreateContact.Infrastructure.UnitOfWork
         public CreateContactUnitOfWork(ITechDatabase database)
             : base(database)
         {
-            this._techDabase = database;
+            this._techDabase = database ?? throw new ArgumentNullException(nameof(database));
 
             this.ContactRepository = new ContactRepository(this._techDabase);
         }

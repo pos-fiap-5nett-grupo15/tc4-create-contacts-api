@@ -11,7 +11,7 @@ namespace CreateContact.Infrastructure.Repositories.Contact
         private const string SCHEMA = "ContactsManagement";
 
         public ContactRepository(ITechDatabase database) =>
-            _database = database;
+            _database = database ?? throw new ArgumentNullException(nameof(database));
 
         public async Task<int> CreateAsync(ContactEntity model)
         {
