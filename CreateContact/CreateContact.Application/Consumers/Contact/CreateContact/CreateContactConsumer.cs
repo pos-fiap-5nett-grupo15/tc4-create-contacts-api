@@ -34,7 +34,7 @@ namespace CreateContact.Application.Consumers.Contact.CreateContact
             {
                 _logger.LogWarning($"An invalid message was received with contact id: {message.Id}.");
 
-                await RabbitMQManager.Publish(
+                await RabbitMQManager.PublishByUri(
                     new CreateContactMessage { Id = message.Id },
                     _rabbitMQProducerSettings.Host,
                     _rabbitMQProducerSettings.Exchange,
