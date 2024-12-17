@@ -3,8 +3,8 @@ trigger:
     include:
       - main
   paths:
-    exclude:
-      - README.md
+    include:
+      - rabbitmq/*
 
 resources:
 - repo: self

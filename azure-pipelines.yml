@@ -6,6 +6,7 @@ trigger:
       - main
   paths:
     exclude:
+      - rabbitmq/*
       - README.md
 
 resources:
