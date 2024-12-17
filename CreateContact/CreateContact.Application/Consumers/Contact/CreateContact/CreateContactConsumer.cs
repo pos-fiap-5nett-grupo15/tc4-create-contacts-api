@@ -2,8 +2,8 @@
 using CreateContact.Infrastructure.Settings;
 using CreateContact.Worker.Messages;
 using Microsoft.Extensions.Logging;
-using TechChallenge.Common.RabbitMQ;
-using TechChallenge.Domain.Enums;
+using TechChallenge3.Common.RabbitMQ;
+using TechChallenge3.Domain.Enums;
 
 namespace CreateContact.Application.Consumers.Contact.CreateContact
 {

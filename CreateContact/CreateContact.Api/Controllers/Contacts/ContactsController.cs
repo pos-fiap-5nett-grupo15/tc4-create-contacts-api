@@ -1,10 +1,8 @@
-﻿using CreateContact.Application.DTOs;
-using CreateContact.Application.DTOs.Contact.CreateContact;
+﻿using CreateContact.Application.DTOs.Contact.CreateContact;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TechChallenge.Common.DTOs;
+using TechChallenge3.Common.DTOs;
 
 namespace CreateContact.Api.Controllers.Contacts
 {
@@ -25,7 +23,15 @@ namespace CreateContact.Api.Controllers.Contacts
         public async Task<IActionResult> CreateAsync(
             [FromBody] CreateContactRequest request)
         {
-            return Created(string.Empty, await _mediator.Send(request));
+            try
+            {
+                return Created(string.Empty, await _mediator.Send(request));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw e;
+            }
         }
     }
 }

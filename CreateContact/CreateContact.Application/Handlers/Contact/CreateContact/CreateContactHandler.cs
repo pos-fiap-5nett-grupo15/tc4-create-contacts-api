@@ -5,9 +5,9 @@ using CreateContact.Worker.Messages;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using TechChallenge.Common.RabbitMQ;
-using TechChallenge.Domain.Entities.Contact;
-using TechChallenge.Domain.Enums;
+using TechChallenge3.Common.RabbitMQ;
+using TechChallenge3.Domain.Entities.Contact;
+using TechChallenge3.Domain.Enums;
 
 namespace CreateContact.Application.Handlers.Contact.CreateContact
 {
@@ -35,10 +35,11 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             if (Validate(requisicao) is var validacao && !string.IsNullOrWhiteSpace(validacao.ErrorDescription))
                 return validacao;
 
-            var id = await _contactService.CreateAsync(Mapper(requisicao));
+            //var test = await _contactService.GetByIdAsync(1);
+            //var id = await _contactService.CreateAsync(Mapper(requisicao));
 
             await RabbitMQManager.Publish(
-                new CreateContactMessage { Id = id },
+                new CreateContactMessage { Id = 1 },
                 _rabbitMQProducerSettings.Host,
                 _rabbitMQProducerSettings.Exchange,
                 _rabbitMQProducerSettings.RoutingKey,

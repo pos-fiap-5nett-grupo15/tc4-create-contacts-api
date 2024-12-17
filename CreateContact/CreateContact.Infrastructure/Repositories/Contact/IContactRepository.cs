@@ -1,4 +1,4 @@
-﻿using TechChallenge.Domain.Entities.Contact;
+﻿using TechChallenge3.Domain.Entities.Contact;
 
 namespace CreateContact.Infrastructure.Repositories.Contact
 {

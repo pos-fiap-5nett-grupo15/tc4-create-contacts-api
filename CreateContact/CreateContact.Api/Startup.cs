@@ -5,7 +5,7 @@ using CreateContact.Infrastructure.Services.Contact;
 using CreateContact.Infrastructure.Settings;
 using CreateContact.Infrastructure.UnitOfWork;
 using FluentValidation;
-using TechChallenge.Infrastructure.DefaultStartup;
+using TechChallenge3.Infrastructure.DefaultStartup;
 
 namespace CreateContact.Api
 {
