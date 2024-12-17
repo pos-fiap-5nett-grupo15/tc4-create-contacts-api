@@ -44,6 +44,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             await PublishByHostName(
                 new CreateContactMessage { Id = 1 },
                 _rabbitMQProducerSettings.Host,
+                _rabbitMQProducerSettings.Port,
                 _rabbitMQProducerSettings.Exchange,
                 _rabbitMQProducerSettings.RoutingKey,
                 ct);
@@ -78,6 +79,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
         public static async Task PublishByHostName(
             object message,
             string hostName,
+            int port,
             string exchangeName,
             string routingKeyName,
             CancellationToken ct)
@@ -85,8 +87,8 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             // Criar uma conexão com o RabbitMQ
             var factory = new ConnectionFactory()
             {
-                HostName = "rabbitmq-service",
-                Port = 5672,
+                HostName = hostName,
+                Port = port,
                 UserName = "guest",
                 Password = "guest",
             };
