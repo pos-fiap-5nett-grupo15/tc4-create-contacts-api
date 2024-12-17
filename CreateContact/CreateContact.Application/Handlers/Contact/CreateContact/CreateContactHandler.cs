@@ -38,7 +38,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             //var test = await _contactService.GetByIdAsync(1);
             //var id = await _contactService.CreateAsync(Mapper(requisicao));
 
-            await RabbitMQManager.Publish(
+            await RabbitMQManager.PublishByUri(
                 new CreateContactMessage { Id = 1 },
                 _rabbitMQProducerSettings.Host,
                 _rabbitMQProducerSettings.Exchange,
