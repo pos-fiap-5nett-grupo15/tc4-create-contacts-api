@@ -15,6 +15,7 @@ namespace CreateContact.Infrastructure.RabbitMQ
             var factory = new ConnectionFactory
             {
                 HostName = RabbitMQSettings.Host,
+                Port = RabbitMQSettings.Port,
                 UserName = RabbitMQSettings.Username,
                 Password = RabbitMQSettings.Password
             };

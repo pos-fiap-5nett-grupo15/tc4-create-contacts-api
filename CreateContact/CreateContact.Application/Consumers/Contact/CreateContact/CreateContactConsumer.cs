@@ -28,24 +28,32 @@ namespace CreateContact.Application.Consumers.Contact.CreateContact
 
         public async Task HandleAsync(CreateContactMessage message, CancellationToken ct)
         {
-            if (await _contactService.GetByIdAsync(message.Id) is var contact && contact is not null)
+            try
             {
-                await _contactService.UpdateStatusByIdAsync(contact, ContactSituationEnum.CRIADO);
-                return;
-            }
-            else
-            {
-                _logger.LogWarning($"An invalid message was received with contact id: {message.Id}.");
+                if (await _contactService.GetByIdAsync(message.Id) is var contact && contact is not null)
+                {
+                    await _contactService.UpdateStatusByIdAsync(contact, ContactSituationEnum.CRIADO);
+                    return;
+                }
+                else
+                {
+                    _logger.LogWarning($"An invalid message was received with contact id: {message.Id}.");
 
-                await PublishByHostName(
-                    new CreateContactMessage { Id = 1 },
-                    _rabbitMQProducerSettings.Host,
-                    _rabbitMQProducerSettings.Port,
-                    _rabbitMQProducerSettings.Exchange,
-                    _rabbitMQProducerSettings.RoutingKey,
-                    ct);
-                return;
+                    await PublishByHostName(
+                        new CreateContactMessage { Id = 1 },
+                        _rabbitMQProducerSettings.Host,
+                        _rabbitMQProducerSettings.Port,
+                        _rabbitMQProducerSettings.Exchange,
+                        _rabbitMQProducerSettings.RoutingKey,
+                        ct);
+                    return;
+                }
             }
+            catch (Exception e)
+            {
+                throw;
+            }
+
         }
 
 
