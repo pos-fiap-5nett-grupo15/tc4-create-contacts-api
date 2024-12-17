@@ -6,8 +6,7 @@ trigger:
       - main
   paths:
     exclude:
-      - rabbitmq/*
-      - README.md
+      - rabbitmq/.
 
 resources:
 - repo: self
