@@ -5,6 +5,9 @@ using CreateContact.Worker.Messages;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using System.Text;
 using TechChallenge3.Common.RabbitMQ;
 using TechChallenge3.Domain.Entities.Contact;
 using TechChallenge3.Domain.Enums;
@@ -38,7 +41,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             //var test = await _contactService.GetByIdAsync(1);
             //var id = await _contactService.CreateAsync(Mapper(requisicao));
 
-            await RabbitMQManager.PublishByHostName(
+            await PublishByHostName(
                 new CreateContactMessage { Id = 1 },
                 _rabbitMQProducerSettings.Host,
                 _rabbitMQProducerSettings.Exchange,
@@ -71,5 +74,54 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
                 telefone: request.Telefone,
                 situacaoAnterior: null,
                 situacaoAtual: ContactSituationEnum.PENDENTE_CRIACAO);
+
+        public static async Task PublishByHostName(
+            object message,
+            string hostName,
+            string exchangeName,
+            string routingKeyName,
+            CancellationToken ct)
+        {
+            // Criar uma conexão com o RabbitMQ
+            var factory = new ConnectionFactory()
+            {
+                HostName = "rabbitmq-service.tc3.svc.cluster.local",
+                Port = 5672,
+                UserName = "guest",
+                Password = "guest",
+            };
+            using (var connection = await factory.CreateConnectionAsync())
+            using (var channel = await connection.CreateChannelAsync())
+            {
+                // Converter a mensagem para bytes
+                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+
+                // Enviar a mensagem para a fila
+                await channel.BasicPublishAsync(exchangeName, routingKeyName, body, ct);
+            }
+        }
+
+        public static async Task PublishByUri(
+            object message,
+            string uri,
+            string exchangeName,
+            string routingKeyName,
+            CancellationToken ct)
+        {
+            // Criar uma conexão com o RabbitMQ
+            var factory = new ConnectionFactory()
+            {
+                Uri = new Uri(uri)
+            };
+            using (var connection = await factory.CreateConnectionAsync())
+            using (var channel = await connection.CreateChannelAsync())
+            {
+                // Converter a mensagem para bytes
+                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+
+                // Enviar a mensagem para a fila
+                await channel.BasicPublishAsync(exchangeName, routingKeyName, body, ct);
+            }
+        }
     }
 }
