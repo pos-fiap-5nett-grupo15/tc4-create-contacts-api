@@ -18,7 +18,7 @@
 		<!-- <ProjectReference Include="..\..\..\tc3-nugets\TechChallenge3.Common\TechChallenge3.Common.csproj" /> -->
 		<!-- <ProjectReference Include="..\..\..\tc3-nugets\TechChallenge3.Domain\TechChallenge3.Domain.csproj" /> -->
 		<!-- <ProjectReference Include="..\..\..\tc3-nugets\TechChallenge3.Infrastructure\TechChallenge3.Infrastructure.csproj" /> -->
-		<PackageReference Include="TechChallenge3.Common" Version="1.1.0" />
+		<PackageReference Include="TechChallenge3.Common" Version="1.3.0" />
 		<PackageReference Include="TechChallenge3.Domain" Version="1.0.0" />
 		<PackageReference Include="TechChallenge3.Infrastructure" Version="1.1.0" />
 	</ItemGroup>

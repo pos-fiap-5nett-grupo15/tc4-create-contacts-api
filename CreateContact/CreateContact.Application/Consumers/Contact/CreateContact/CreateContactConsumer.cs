@@ -39,49 +39,35 @@ namespace CreateContact.Application.Consumers.Contact.CreateContact
                 {
                     _logger.LogWarning($"An invalid message was received with contact id: {message.Id}.");
 
-                    await PublishByHostName(
-                        new CreateContactMessage { Id = 1 },
-                        _rabbitMQProducerSettings.Host,
-                        _rabbitMQProducerSettings.Port,
-                        _rabbitMQProducerSettings.Exchange,
-                        _rabbitMQProducerSettings.RoutingKey,
+                    await RabbitMQManager.PublishAsync(
+                        message: new CreateContactMessage { Id = message.Id },
+                        hostName: _rabbitMQProducerSettings.Host,
+                        port: _rabbitMQProducerSettings.Port,
+                        userName: _rabbitMQProducerSettings.Username,
+                        password: _rabbitMQProducerSettings.Password,
+                        exchangeName: _rabbitMQProducerSettings.Exchange,
+                        routingKeyName: _rabbitMQProducerSettings.RoutingKey,
                         ct);
                     return;
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"An error occurr while consume contact ID '{message.Id}': {e.Message}.");
+
+                await RabbitMQManager.PublishAsync(
+                    message: new CreateContactMessage { Id = message.Id },
+                    hostName: _rabbitMQProducerSettings.Host,
+                    port: _rabbitMQProducerSettings.Port,
+                    userName: _rabbitMQProducerSettings.Username,
+                    password: _rabbitMQProducerSettings.Password,
+                    exchangeName: _rabbitMQProducerSettings.Exchange,
+                    routingKeyName: _rabbitMQProducerSettings.RoutingKey,
+                    ct);
+
                 throw;
             }
 
-        }
-
-
-        public static async Task PublishByHostName(
-            object message,
-            string hostName,
-            int port,
-            string exchangeName,
-            string routingKeyName,
-            CancellationToken ct)
-        {
-            // Criar uma conexão com o RabbitMQ
-            var factory = new ConnectionFactory()
-            {
-                HostName = hostName,
-                Port = port,
-                UserName = "guest",
-                Password = "guest",
-            };
-            using (var connection = await factory.CreateConnectionAsync())
-            using (var channel = await connection.CreateChannelAsync())
-            {
-                // Converter a mensagem para bytes
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-
-                // Enviar a mensagem para a fila
-                await channel.BasicPublishAsync(exchangeName, routingKeyName, body, ct);
-            }
         }
     }
 }

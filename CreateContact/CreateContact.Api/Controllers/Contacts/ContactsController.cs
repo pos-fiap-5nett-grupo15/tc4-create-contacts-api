@@ -8,7 +8,7 @@ namespace CreateContact.Api.Controllers.Contacts
 {
     [ApiController]
     [Route("[controller]")]
-    // TODO: Implementar autenticação/autorização
+    // TODO: Implementar autenticação/autorização no futuro
     public class ContactsController
         : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
     }

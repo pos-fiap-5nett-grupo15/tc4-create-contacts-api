@@ -35,21 +35,31 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
 
         public async Task<CreateContactResponse> Handle(CreateContactRequest requisicao, CancellationToken ct)
         {
-            if (Validate(requisicao) is var validacao && !string.IsNullOrWhiteSpace(validacao.ErrorDescription))
-                return validacao;
+            try
+            {
+                if (Validate(requisicao) is var validacao && !string.IsNullOrWhiteSpace(validacao.ErrorDescription))
+                    return validacao;
 
-            //var test = await _contactService.GetByIdAsync(1);
-            //var id = await _contactService.CreateAsync(Mapper(requisicao));
+                var id = await _contactService.CreateAsync(Mapper(requisicao));
 
-            await PublishByHostName(
-                new CreateContactMessage { Id = 1 },
-                _rabbitMQProducerSettings.Host,
-                _rabbitMQProducerSettings.Port,
-                _rabbitMQProducerSettings.Exchange,
-                _rabbitMQProducerSettings.RoutingKey,
-                ct);
+                await RabbitMQManager.PublishAsync(
+                    message: new CreateContactMessage { Id = id },
+                    hostName: _rabbitMQProducerSettings.Host,
+                    port: _rabbitMQProducerSettings.Port,
+                    userName: _rabbitMQProducerSettings.Username,
+                    password: _rabbitMQProducerSettings.Password,
+                    exchangeName: _rabbitMQProducerSettings.Exchange,
+                    routingKeyName: _rabbitMQProducerSettings.RoutingKey,
+                    ct);
 
-            return new CreateContactResponse();
+                return new CreateContactResponse();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurr while creating contact.");
+
+                throw;
+            }
         }
 
         public CreateContactResponse Validate(CreateContactRequest requisicao)
@@ -75,55 +85,5 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
                 telefone: request.Telefone,
                 situacaoAnterior: null,
                 situacaoAtual: ContactSituationEnum.PENDENTE_CRIACAO);
-
-        public static async Task PublishByHostName(
-            object message,
-            string hostName,
-            int port,
-            string exchangeName,
-            string routingKeyName,
-            CancellationToken ct)
-        {
-            // Criar uma conexão com o RabbitMQ
-            var factory = new ConnectionFactory()
-            {
-                HostName = hostName,
-                Port = port,
-                UserName = "guest",
-                Password = "guest",
-            };
-            using (var connection = await factory.CreateConnectionAsync())
-            using (var channel = await connection.CreateChannelAsync())
-            {
-                // Converter a mensagem para bytes
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-
-                // Enviar a mensagem para a fila
-                await channel.BasicPublishAsync(exchangeName, routingKeyName, body, ct);
-            }
-        }
-
-        public static async Task PublishByUri(
-            object message,
-            string uri,
-            string exchangeName,
-            string routingKeyName,
-            CancellationToken ct)
-        {
-            // Criar uma conexão com o RabbitMQ
-            var factory = new ConnectionFactory()
-            {
-                Uri = new Uri(uri)
-            };
-            using (var connection = await factory.CreateConnectionAsync())
-            using (var channel = await connection.CreateChannelAsync())
-            {
-                // Converter a mensagem para bytes
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-
-                // Enviar a mensagem para a fila
-                await channel.BasicPublishAsync(exchangeName, routingKeyName, body, ct);
-            }
-        }
     }
 }
