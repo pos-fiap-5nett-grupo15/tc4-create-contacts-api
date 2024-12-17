@@ -17,7 +17,7 @@ namespace CreateContact.Api.Controllers.Contacts
         public ContactsController(IMediator mediator) =>
             _mediator = mediator;
 
-        [HttpPost]
+        [HttpPost("create")]
         [SwaggerResponse(StatusCodes.Status201Created)]
         [SwaggerResponse(StatusCodes.Status400BadRequest, type: typeof(BaseReponse))]
         public async Task<IActionResult> CreateAsync(
