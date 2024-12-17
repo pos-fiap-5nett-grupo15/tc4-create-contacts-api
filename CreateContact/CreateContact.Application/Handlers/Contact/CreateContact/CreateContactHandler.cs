@@ -85,7 +85,7 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
             // Criar uma conexão com o RabbitMQ
             var factory = new ConnectionFactory()
             {
-                HostName = "rabbitmq-service.tc3.svc.cluster.local",
+                HostName = "http://rabbitmq-service.tc3.svc.cluster.local",
                 Port = 5672,
                 UserName = "guest",
                 Password = "guest",
