@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: create-contacs
+  name: create-contacts
   namespace: tc3
   labels:
-    app: create-contacs
+    app: create-contacts
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: create-contacs
+      app: create-contacts
   template:
     metadata:
       labels:
-        app: create-contacs
+        app: create-contacts
     spec:
       containers:
-      - name: create-contacs
+      - name: create-contacts
         image: fiaptech3acr.azurecr.io/tc3-create-contact:latest #usar tag e nome do container como variáveis no build para simplificar a reutilização.
         ports:
         - containerPort: 8081
@@ -29,11 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: create-contacs-service
+  name: create-contacts-service
   namespace: tc3
 spec:
   selector:
-    app: create-contacs
+    app: create-contacts
   ports:
     - protocol: TCP
       port: 80

@@ -5,7 +5,7 @@ trigger:
   paths:
     include:
       - rabbitmq/*
-      - CreateContact/CreateContract.Worker/*
+      - CreateContact/CreateContact.Worker/*
 
 resources:
 - repo: self

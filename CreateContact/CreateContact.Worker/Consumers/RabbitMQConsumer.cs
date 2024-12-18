@@ -6,7 +6,7 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 
-namespace CreateContract.Worker.Consumers
+namespace CreateContact.Worker.Consumers
 {
     public class RabbitMQConsumer : BackgroundService
     {

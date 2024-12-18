@@ -3,14 +3,14 @@ using CreateContact.Infrastructure.RabbitMQ;
 using CreateContact.Infrastructure.Services.Contact;
 using CreateContact.Infrastructure.Settings;
 using CreateContact.Infrastructure.UnitOfWork;
-using CreateContract.Worker.Consumers;
+using CreateContact.Worker.Consumers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using TechChallenge3.Infrastructure.Crypto;
 using TechChallenge3.Infrastructure.Settings;
 using TechChallenge3.Infrastructure.UnitOfWork;
 
-namespace CreateContract.Worker
+namespace CreateContact.Worker
 {
     internal class Startup
     {
