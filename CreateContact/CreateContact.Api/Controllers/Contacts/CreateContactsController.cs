@@ -9,15 +9,15 @@ namespace CreateContact.Api.Controllers.Contacts
     [ApiController]
     [Route("[controller]")]
     // TODO: Implementar autenticação/autorização no futuro
-    public class ContactsController
+    public class CreateContactsController
         : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ContactsController(IMediator mediator) =>
+        public CreateContactsController(IMediator mediator) =>
             _mediator = mediator;
 
-        [HttpPost("create")]
+        [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created)]
         [SwaggerResponse(StatusCodes.Status400BadRequest, type: typeof(BaseReponse))]
         public async Task<IActionResult> CreateAsync(
