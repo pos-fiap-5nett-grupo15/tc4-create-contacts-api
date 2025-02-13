@@ -13,9 +13,15 @@ namespace CreateContact.Api.Controllers.Contacts
         : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<CreateContactsController> _logger;
 
-        public CreateContactsController(IMediator mediator) =>
+        public CreateContactsController(
+            IMediator mediator,
+            ILogger<CreateContactsController> logger)
+        {
             _mediator = mediator;
+            _logger = logger;
+        }
 
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created)]
@@ -30,6 +36,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                _logger.LogError(e, e.Message);
                 throw;
             }
         }
