@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "http.host=0.0.0.0"
+      - "xpack.security.enabled=false"
+    restart: always
+
+  graylog:
+    image: graylog/graylog:5.1
+    container_name: graylog
+    environment:
+      GRAYLOG_PASSWORD_SECRET: "somepasswordsecret"
+      GRAYLOG_ROOT_PASSWORD_SHA2: "8cbc7bf0c062388a37289c029aabe652e5dd5b0ab2e1c015a8d240a05d1610be"
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9000/"
+      GRAYLOG_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - "9000:9000"        # Interface web
+      - "12201:12201/udp"  # Entrada GELF UDP
+      - "12201:12201/tcp"  # Entrada GELF TCP
+    restart: always
+
