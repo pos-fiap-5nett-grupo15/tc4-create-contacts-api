@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TechChallenge3.Common.DTOs;
+using TechChallenge3.Common.LogSettings;
 
 namespace CreateContact.Api.Controllers.Contacts
 {
@@ -13,11 +14,11 @@ namespace CreateContact.Api.Controllers.Contacts
         : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<CreateContactsController> _logger;
+        private readonly IGraylogger _logger;
 
         public CreateContactsController(
             IMediator mediator,
-            ILogger<CreateContactsController> logger)
+            IGraylogger logger)
         {
             _mediator = mediator;
             _logger = logger;
@@ -36,7 +37,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                _logger.LogError(e, e.Message);
+                await _logger.LogError(e, e.Message);
                 throw;
             }
         }
