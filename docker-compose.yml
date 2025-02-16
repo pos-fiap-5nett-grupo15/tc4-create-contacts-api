@@ -1,9 +1,14 @@
-version: '3'
+version: '3.8'  # Use uma versão mais recente para compatibilidade
+
 services:
   mongo:
     image: mongo:5.0
     container_name: mongo
     restart: always
+    volumes:
+      - mongo_data:/data/db  # Persistência dos dados
+    networks:
+      - graylog
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
@@ -12,6 +17,11 @@ services:
       - "discovery.type=single-node"
       - "http.host=0.0.0.0"
       - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Define limite de memória para evitar crashes
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data  # Persistência dos dados
+    networks:
+      - graylog
     restart: always
 
   graylog:
@@ -22,12 +32,23 @@ services:
       GRAYLOG_ROOT_PASSWORD_SHA2: "8cbc7bf0c062388a37289c029aabe652e5dd5b0ab2e1c015a8d240a05d1610be"
       GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9000/"
       GRAYLOG_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      GRAYLOG_MONGODB_URI: "mongodb://mongo:27017/graylog"  # Garante que Graylog conecta ao Mongo
     depends_on:
       - mongo
       - elasticsearch
     ports:
       - "9000:9000"        # Interface web
+      - "1514:1514/udp"    # Syslog UDP (pode precisar de permissões)
+      - "1514:1514/tcp"    # Syslog TCP
       - "12201:12201/udp"  # Entrada GELF UDP
       - "12201:12201/tcp"  # Entrada GELF TCP
+    networks:
+      - graylog
     restart: always
 
+volumes:
+  mongo_data:
+  elasticsearch_data:
+
+networks:
+  graylog:
