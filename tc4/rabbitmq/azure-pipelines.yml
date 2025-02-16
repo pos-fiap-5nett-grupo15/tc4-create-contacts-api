@@ -64,7 +64,7 @@ stages:
   displayName: Deploy Stage
   jobs:
   - job: DeployMicrosservice
-    displayName: Deploy Get API Microservice to AKS
+    displayName: Deploy Create Consumer to AKS
     steps:
       - script: ls $(System.DefaultWorkingDirectory)/k8s
         displayName: "Check folder $(System.DefaultWorkingDirectory)"
