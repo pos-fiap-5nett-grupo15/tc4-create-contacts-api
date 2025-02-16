@@ -3,7 +3,7 @@
 trigger:
   branches:
     include:
-      - dev
+      - main
   paths:
     exclude:
       - rabbitmq/*

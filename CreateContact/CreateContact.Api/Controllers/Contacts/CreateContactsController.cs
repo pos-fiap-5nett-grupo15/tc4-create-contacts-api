@@ -31,7 +31,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return Content(e.Message, "text/plain", Encoding.UTF8);
+                return BadRequest(e);
             }
         }
     }
