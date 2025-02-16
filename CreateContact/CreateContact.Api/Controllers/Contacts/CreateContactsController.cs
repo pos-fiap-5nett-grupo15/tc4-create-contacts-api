@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Dynamic;
 using System.Text;
 using TechChallenge3.Common.DTOs;
 
@@ -31,7 +32,13 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return BadRequest(e);
+
+                dynamic response = new ExpandoObject();
+                response.Message = e.Message;
+                response.StackTrace = e.StackTrace;
+                response.InnerException = e.InnerException;
+
+                return BadRequest(response);
             }
         }
     }
