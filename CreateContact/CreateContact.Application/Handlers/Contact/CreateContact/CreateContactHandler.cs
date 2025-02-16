@@ -39,15 +39,15 @@ namespace CreateContact.Application.Handlers.Contact.CreateContact
 
                 var id = await _contactService.CreateAsync(Mapper(requisicao));
 
-                await RabbitMQManager.PublishAsync(
-                    message: new CreateContactMessage { Id = id },
-                    hostName: _rabbitMQProducerSettings.Host,
-                    port: _rabbitMQProducerSettings.Port,
-                    userName: _rabbitMQProducerSettings.Username,
-                    password: _rabbitMQProducerSettings.Password,
-                    exchangeName: _rabbitMQProducerSettings.Exchange,
-                    routingKeyName: _rabbitMQProducerSettings.RoutingKey,
-                    ct);
+                //await RabbitMQManager.PublishAsync(
+                //    message: new CreateContactMessage { Id = id },
+                //    hostName: _rabbitMQProducerSettings.Host,
+                //    port: _rabbitMQProducerSettings.Port,
+                //    userName: _rabbitMQProducerSettings.Username,
+                //    password: _rabbitMQProducerSettings.Password,
+                //    exchangeName: _rabbitMQProducerSettings.Exchange,
+                //    routingKeyName: _rabbitMQProducerSettings.RoutingKey,
+                //    ct);
 
                 return new CreateContactResponse();
             }

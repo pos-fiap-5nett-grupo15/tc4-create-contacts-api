@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text;
 using TechChallenge3.Common.DTOs;
 
 namespace CreateContact.Api.Controllers.Contacts
@@ -30,7 +31,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw;
+                return BadRequest(e);
             }
         }
     }
