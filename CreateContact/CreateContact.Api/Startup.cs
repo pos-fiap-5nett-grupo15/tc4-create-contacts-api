@@ -5,14 +5,13 @@ using CreateContact.Infrastructure.Services.Contact;
 using CreateContact.Infrastructure.Settings;
 using CreateContact.Infrastructure.UnitOfWork;
 using FluentValidation;
+using Serilog;
 using TechChallenge3.Infrastructure.DefaultStartup;
 
 namespace CreateContact.Api
 {
     internal class Startup : BaseStartup
     {
-        public IConfiguration Configuration;
-
         public Startup(IConfiguration configuration)
             : base(configuration)
         {
@@ -24,14 +23,15 @@ namespace CreateContact.Api
             this.Configure(app, environment);
         }
 
-        internal void ConfigureServiceImpl(IServiceCollection services)
+        internal void ConfigureServiceImpl(WebApplicationBuilder builder)
         {
-            this.ConfigureService(services);
-            services.AddLogging();
+            this.ConfigureService(builder.Services);
+            builder.Host.UseSerilog();
+            builder.Services.AddLogging();
 
-            ConfigureUnitOfWork(services);
-            ConfigureHandleServices(services);
-            ConfigureContactServices(services);
+            ConfigureUnitOfWork(builder.Services);
+            ConfigureHandleServices(builder.Services);
+            ConfigureContactServices(builder.Services);
         }
 
         private void ConfigureContactServices(IServiceCollection services)
