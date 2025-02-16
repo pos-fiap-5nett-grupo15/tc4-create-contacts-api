@@ -30,7 +30,7 @@ namespace CreateContact.Api.Controllers.Contacts
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw;
+                return Content(e.Message, "text/plain");
             }
         }
     }
