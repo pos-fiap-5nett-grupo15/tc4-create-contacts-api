@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: create-contacts
-  namespace: tc3
+  namespace: PLACEHOLDER_NAMESPACE
   labels:
     app: create-contacts
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: create-contacts
-        image: fiaptech3acr.azurecr.io/tc3-create-contact:latest #usar tag e nome do container como variáveis no build para simplificar a reutilização.
+        image: PLACEHOLDER_CONTAINER_REGISTRY/PLACEHOLDER_IMAGE_REPOSITORY:latest #usar tag e nome do container como variáveis no build para simplificar a reutilização.
         ports:
         - containerPort: 8081
         env:
@@ -30,7 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: create-contacts-service
-  namespace: tc3
+  namespace: PLACEHOLDER_NAMESPACE
 spec:
   selector:
     app: create-contacts
