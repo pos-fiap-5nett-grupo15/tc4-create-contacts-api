@@ -6,6 +6,7 @@ using CreateContact.Infrastructure.UnitOfWork;
 using CreateContact.Worker.Consumers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 using TechChallenge3.Infrastructure.Crypto;
 using TechChallenge3.Infrastructure.Settings;
 using TechChallenge3.Infrastructure.UnitOfWork;
@@ -34,8 +35,14 @@ namespace CreateContact.Worker
 
         private void ConfigureRabitMQ(IServiceCollection services)
         {
-            services.AddSingleton<IRabbitMQProducerSettings>(Configuration.GetSection(nameof(RabbitMQProducerSettings))?.Get<RabbitMQProducerSettings>() ?? throw new ArgumentNullException(nameof(RabbitMQProducerSettings)));
-            services.AddSingleton(new RabbitMQConnector(Configuration.GetSection(nameof(RabbitMQConsumerSettings))?.Get<RabbitMQConsumerSettings>()));
+            var rabbitMQProducerSettings = Configuration.GetSection(nameof(RabbitMQProducerSettings))?.Get<RabbitMQProducerSettings>() ?? throw new ArgumentNullException(nameof(RabbitMQProducerSettings));
+            var rabbitMQConsumerSettings = Configuration.GetSection(nameof(RabbitMQConsumerSettings))?.Get<RabbitMQConsumerSettings>() ?? throw new ArgumentNullException(nameof(RabbitMQConsumerSettings));
+
+            System.Console.WriteLine(JsonConvert.SerializeObject($"RabbitMQProducerSettings: {rabbitMQProducerSettings}"));
+            System.Console.WriteLine(JsonConvert.SerializeObject($"RabbitMQConsumerSettings: {rabbitMQConsumerSettings}"));
+
+            services.AddSingleton<IRabbitMQProducerSettings>(rabbitMQProducerSettings);
+            services.AddSingleton(new RabbitMQConnector(rabbitMQConsumerSettings));
             services.AddHostedService<RabbitMQConsumer>();
         }
 
